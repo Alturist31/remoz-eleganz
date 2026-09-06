@@ -1,10 +1,6 @@
 import React from "react";
 import { defineConfig } from "tinacms";
 
-if (typeof window === "undefined" || !process.env.TINA_PUBLIC_IS_LOCAL) {
-  process.env.TINA_PUBLIC_IS_LOCAL = "true";
-}
-
 export default defineConfig({
   branch: "main",
   clientId: process.env.TINA_CLIENT_ID || "00000000-0000-0000-0000-000000000000",
@@ -82,7 +78,10 @@ export default defineConfig({
           { type: "image", name: "image", label: "Image" },
           { type: "number", name: "price", label: "Price" },
           { type: "number", name: "moq", label: "MOQ" },
-          { type: "string", name: "colors", label: "Colors", list: true, options: ["black", "white", "blue", "red", "gray", "tan", "green"] }
+          { type: "string", name: "colors", label: "Colors", list: true, options: ["black", "white", "blue", "red", "gray", "tan", "green"] },
+          
+          // 🚀 THE RESTORED PRODUCT DESCRIPTION TEXT BOX
+          { type: "rich-text", name: "body", label: "Product Description", isBody: true }
         ]
       }
     ]
