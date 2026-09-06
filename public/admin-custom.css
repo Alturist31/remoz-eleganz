@@ -1,0 +1,30 @@
+
+/* 1. Hides the small orange llama icon from the sidebar header banner completely */
+svg[data-test="tina-logo"],
+div[class*="SidebarContainer"] svg,
+div[class*="SidebarContainer"] img[src*="llama"],
+.tina-logo-svg {
+  display: none !important;
+}
+
+/* 2. Overrides the sidebar title text area wrapper background block and forces your Venture Solutions logo banner to display instead */
+div[class*="SidebarHeader"] h2,
+div[class*="SidebarHeader"] a[href*="admin"],
+div[class*="SidebarContainer"] div[style*="display: flex"] h2 {
+  background-image: url("/logo.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  background-size: contain !important;
+  height: 38px !important;
+  width: 175px !important;
+  text-indent: -9999px !important; /* Safely hides the text label off screen boundaries while preserving branding layout dimensions */
+  display: block !important;
+  margin-left: 5px !important;
+}
+
+/* 3. Removes the fallback llama icon badge from the upper floating text block panel row alert container */
+div[class*="LocalModeNotification"] svg,
+span[class*="LocalModeBadge"] svg,
+div[style*="border-color: rgb(249, 115, 22)"] svg {
+  display: none !important;
+}

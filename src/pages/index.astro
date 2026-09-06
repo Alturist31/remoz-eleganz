@@ -1,0 +1,257 @@
+---
+import { getCollection } from 'astro:content';
+import BulkCounter from '../components/BulkCounter.jsx';
+import logoImage from '../assets/logo.png';
+
+const localProducts = await getCollection('products');
+
+const rawCategories = localProducts.flatMap(p => {
+  const cat = p.data?.category || [];
+  if (Array.isArray(cat)) {
+    return cat.map(c => typeof c === 'string' ? c.trim() : '');
+  }
+  if (typeof cat === 'string' && cat.trim() !== '') {
+    return [cat.trim()];
+  }
+  return [];
+}).map(c => c.trim()).filter(c => c.length > 1);
+
+const uniqueCategories = ["All", ...new Set(rawCategories)];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remoz Eleganz - Premium Gifting Catalog</title>
+    <style>
+      body { font-family: system-ui, sans-serif; padding: 0; background: #f8fafc; color: #0f172a; margin: 0; }
+      .brand-header { background: white; padding: 16px 48px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; gap: 20px; }
+      .logo-link { text-decoration: none; cursor: pointer; display: inline-block; }
+      .logo-box { display: flex; align-items: center; gap: 14px; }
+      .logo-img { height: 48px; width: auto; object-fit: contain; }
+      
+      /* 🚀 RECOLORED BRAND ACCENTS: Swapped to #E31E24 Premium Crimson Red */
+      .brand-title { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.75px; }
+      .brand-title span { color: #E31E24; }
+      .toolbar-controls { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; }
+      
+      .reset-btn { background: #ef4444; color: white; border: none; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; display: none; white-space: nowrap; box-shadow: 0 2px 4px rgba(239, 68, 68, 0.15); }
+      .reset-btn:hover { background: #dc2626; }
+
+      .search-wrapper { position: relative; width: 240px; }
+      .search-input { width: 100%; padding: 10px 16px 10px 38px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; box-sizing: border-box; background: #f8fafc; transition: all 0.2s; }
+      .search-input:focus { border-color: #E31E24; background: white; box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1); }
+      .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 14px; }
+      
+      .sort-select { 
+        padding: 10px 40px 10px 16px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; background-color: #f8fafc; color: #334155; font-weight: 500; cursor: pointer; transition: all 0.2s; box-sizing: border-box; appearance: none !important; -webkit-appearance: none !important; -moz-appearance: none !important;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>") !important;
+        background-repeat: no-repeat !important; background-position: right 14px center !important; background-size: 16px !important;
+      }
+      .sort-select:focus { border-color: #E31E24; background-color: white; box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1); }
+      main { max-width: 1200px; margin: 0 auto; padding: 48px 32px; }
+      
+      /* 🚀 RECOLORED OPTIONS COUNTER: Modified to Premium Soft Red Tints (#FDF2F2 and #E31E24) */
+      .count-badge { display: inline-block; font-size: 14px; font-weight: 700; color: #E31E24; margin-bottom: 22px; background: #FDF2F2; padding: 8px 18px; border-radius: 8px; border: 1px dashed #E31E24; letter-spacing: 0.25px; box-shadow: 0 2px 4px rgba(227, 30, 36, 0.02); }
+      .count-badge .count-number-box { color: #E31E24 !important; font-weight: 800 !important; font-size: 14px !important; margin: 0 3px !important; display: inline-block !important; }
+
+      .filter-menu { display: flex; justify-content: center; gap: 12px; margin: 0 0 32px 0; flex-wrap: wrap; }
+      .filter-btn { background: white; border: 1px solid #e2e8f0; padding: 10px 20px; border-radius: 24px; cursor: pointer; font-weight: 600; font-size: 14px; color: #475569; transition: all 0.2s; }
+      .filter-btn:hover { background: #f8fafc; border-color: #cbd5e1; color: #0f172a; }
+      .filter-btn.active { background: #E31E24; color: white; border-color: #E31E24; }
+      
+      .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px; }
+      .product-card { background: white; border-radius: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e2e8f0; opacity: 1; transition: transform 0.2s, box-shadow 0.2s, opacity 0.25s ease-out; animation: cardFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+      .product-card:hover { transform: translateY(-4px); }
+      
+      @keyframes cardFadeIn {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .product-image { width: 100%; height: 220px; object-fit: cover; background-color: #f8fafc; }
+      .card-content { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+      .badge-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+      
+      /* 🚀 RECOLORED PRODUCT CARD BADGES */
+      .badge { background: #FDF2F2; color: #E31E24; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+      .product-card h3 { margin: 8px 0; font-size: 20px; font-weight: 700; color: #0f172a; }
+      .meta { font-size: 14px; color: #475569; margin-bottom: 18px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 12px; }
+      .meta p { margin: 6px 0; }
+
+      @media (max-width: 768px) {
+        .brand-header { padding: 16px 20px; justify-content: center; text-align: center; }
+        .toolbar-controls { width: 100%; flex-direction: column; flex-wrap: wrap; gap: 10px; align-items: stretch; }
+        .search-wrapper, .sort-select { width: 100% !important; max-width: 100% !important; }
+        .reset-btn { width: 100%; text-align: center; display: none; }
+        main { padding: 24px 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="brand-header">
+      <a href="/" class="logo-link">
+        <div class="logo-box">
+          <img src={logoImage.src} alt="Remoz Eleganz Logo" class="logo-img" />
+          <div class="brand-title">Remoz<span>Eleganz</span></div>
+        </div>
+      </a>
+      <div class="toolbar-controls">
+        <button id="resetFiltersBtn" class="reset-btn">✕ Clear Filters</button>
+        <select id="priceSorter" class="sort-select">
+          <option value="default">Sort by Price</option>
+          <option value="lowHigh">Price: Low to High</option>
+          <option value="highLow">Price: High to Low</option>
+        </select>
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="globalSearch" placeholder="Search products..." class="search-input" />
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="filter-menu">
+        {uniqueCategories.map((cat, index) => (
+          <button class={`filter-btn ${index === 0 ? "active" : ""}`} data-target={cat}>
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div class="count-badge" id="catalogCounter">
+        Showing <span class="count-number-box">{localProducts.length}</span> Options
+      </div>
+
+      <div class="catalog-grid" id="catalogGrid">
+        {localProducts.map((product) => {
+          let pCats = [];
+          const rawCatField = product.data?.category || [];
+          if (Array.isArray(rawCatField)) {
+            pCats = rawCatField.map((c) => typeof c === "string" ? c.trim() : "");
+          } else if (typeof rawCatField === "string" && rawCatField.trim() !== "") {
+            pCats = [rawCatField.trim()];
+          }
+          pCats = pCats.filter(c => c.length > 1);
+          if (pCats.length === 0) pCats = ["General"];
+          const itemDescription = product.body ? product.body.toLowerCase() : "";
+          return (
+            <div class="product-card" data-categories={JSON.stringify(pCats).toLowerCase()} data-title={product.data?.title?.toLowerCase() || ''} data-desc={itemDescription} data-price={product.data?.price || 0} data-initial-order={product.id}>
+              <img src={product.data?.image || ''} alt={product.data?.title || ''} class="product-image" />
+              <div class="card-content">
+                <div>
+                  <div class="badge-container">
+                    {pCats.map(c => <span class="badge">{c}</span>)}
+                  </div>
+                  <h3>{product.data?.title || 'Product'}</h3>
+                  <div class="meta">
+                    <p><strong>Base Price:</strong> ₹{product.data?.price || 0}</p>
+                    <p><strong>Min. Order (MOQ):</strong> {product.data?.moq || 1} units</p>
+                  </div>
+                  {product.data?.colors && product.data.colors.length > 0 && (
+                    <div style="display: flex; gap: 6px; margin: 10px 0; align-items: center;">
+                      <span style="font-size: 13px; color: #475569; font-weight: 500;">Colors:</span>
+                      {product.data.colors.map((color) => {
+                        const hexColor = color === "tan" ? "#d2b48c" : color;
+                        return <span title={color} style={`display: inline-block; width: 16px; height: 16px; border-radius: 50%; background-color: ${hexColor}; border: 1px solid #cbd5e1; margin-right: 4px;`} />;
+                      })}
+                    </div>
+                  )}
+                </div>
+                <BulkCounter client:load initialQty={product.data?.moq || 1} basePrice={product.data?.price || 0} productName={product.data?.title || 'Product'} availableColors={product.data?.colors || []} productDesc={product.body} categoryName={pCats.join(", ")} productImage={product.data?.image || ''} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </main>
+    <script>
+      const searchInput = document.getElementById("globalSearch") as HTMLInputElement;
+      const priceSorter = document.getElementById("priceSorter") as HTMLSelectElement;
+      const resetFiltersBtn = document.getElementById("resetFiltersBtn") as HTMLButtonElement;
+      const catalogCounter = document.getElementById("catalogCounter") as HTMLDivElement;
+      const catalogGrid = document.getElementById("catalogGrid") as HTMLElement;
+      const buttons = document.querySelectorAll(".filter-menu .filter-btn");
+      const cards = document.querySelectorAll(".catalog-grid .product-card") as NodeListOf<HTMLElement>;
+      let activeCategory = "All";
+      let searchQuery = "";
+
+      function filterCatalog() {
+        const lowerCategory = activeCategory.toLowerCase();
+        let visibleCount = 0;
+        
+        cards.forEach(card => {
+          const title = card.getAttribute("data-title") || "";
+          const desc = card.getAttribute("data-desc") || "";
+          const cardCategoriesStr = card.getAttribute("data-categories") || "[]";
+          const cardCategories = JSON.parse(cardCategoriesStr);
+          const matchesCategory = activeCategory === "All" || cardCategories.includes(lowerCategory);
+          const matchesSearch = searchQuery === "" || title.includes(searchQuery) || desc.includes(searchQuery) || cardCategoriesStr.includes(searchQuery);
+          
+          if (matchesCategory && matchesSearch) {
+            if (card.style.display !== 'flex') {
+              card.style.opacity = '0';
+              card.style.display = 'flex';
+              setTimeout(() => { card.style.opacity = '1'; }, 10);
+            }
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        
+        catalogCounter.innerHTML = `Showing <span class="count-number-box">${visibleCount}</span> Option${visibleCount === 1 ? '' : 's'}`;
+        
+        const isSortActive = priceSorter.value !== 'default' && priceSorter.value !== '';
+        if (searchQuery !== '' || activeCategory !== 'All' || isSortActive) {
+          resetFiltersBtn.style.display = 'block';
+        } else {
+          resetFiltersBtn.style.display = 'none';
+        }
+      }
+
+      function sortCatalog() {
+        const sortType = priceSorter.value;
+        const cardsArray = Array.from(cards);
+        if (sortType === 'default' || sortType === '') {
+          cardsArray.sort((a, b) => (a.getAttribute('data-initial-order') || '').localeCompare(b.getAttribute('data-initial-order') || ''));
+        } else {
+          cardsArray.sort((a, b) => {
+            const priceA = Number(a.getAttribute("data-price") || 0);
+            const priceB = Number(b.getAttribute("data-price") || 0);
+            return sortType === "lowHigh" ? priceA - priceB : priceB - priceA;
+          });
+        }
+        cardsArray.forEach(card => catalogGrid.appendChild(card));
+        filterCatalog();
+      }
+
+      resetFiltersBtn?.addEventListener('click', () => {
+        searchInput.value = '';
+        searchQuery = '';
+        priceSorter.value = 'default';
+        activeCategory = 'All';
+        document.querySelector('.filter-btn.active')?.classList.remove('active');
+        if (buttons && buttons.length > 0) {
+          buttons[0].classList.add('active');
+        }
+        sortCatalog();
+      });
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelector(".filter-btn.active")?.classList.remove("active");
+          btn.classList.add("active");
+          activeCategory = btn.getAttribute("data-target") || "All";
+          filterCatalog();
+        });
+      });
+
+      searchInput?.addEventListener("input", (e) => {
+        searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        filterCatalog();
+      });
+      priceSorter?.addEventListener("change", () => { sortCatalog(); });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+---
+// src/pages/admin.astro
+// Clean container mapping for your Tina CMS admin path routing loop
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Content Manager Dashboard</title>
+    <!-- Map the config metadata blueprint layer -->
+    <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
+  </head>
+  <body>
+    <!-- The official stable production package engine script -->
+    <script src="https://jsdelivr.net" is:inline></script>
+  </body>
+</html>
