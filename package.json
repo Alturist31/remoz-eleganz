@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "tinacms dev --port 9001 -c \"astro dev\"",
     "start": "astro dev",
-    "build": "tinacms build && astro build"
+    "build": "TINA_PUBLIC_IS_LOCAL=true tinacms build && astro build"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.4",
