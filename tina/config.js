@@ -1,11 +1,12 @@
 import React from "react";
 import { defineConfig } from "tinacms";
 
+const isLocal = process.env.NODE_ENV === "development";
+
 export default defineConfig({
-  branch: "main",
-  
-  // 🚀 THE PERMANENT FIX: Removing clientId & token completely disables the cloud fetch check system!
-  
+  branch: isLocal ? undefined : (process.env.NEXT_PUBLIC_TINA_BRANCH || "main"),
+  clientId: isLocal ? undefined : process.env.TINA_CLIENT_ID || null,
+  token: isLocal ? undefined : process.env.TINA_TOKEN || null,
   build: { outputFolder: "admin", publicFolder: "public" },
   media: { tina: { mediaRoot: "uploads", publicFolder: "public" } },
   
