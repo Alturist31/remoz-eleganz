@@ -1,5 +1,5 @@
 ---
-title: Sample Product
+title: Sample Products
 category:
   - Tech & Lifestyle
   - Hampers
