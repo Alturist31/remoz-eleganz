@@ -1,15 +1,14 @@
 import React from "react";
 import { defineConfig } from "tinacms";
 
-// 🚀 THE ULTIMATE CLOUD STRIP FIX: Forcing this flag inline at the absolute global runtime wrapper tells Tina to compile 100% offline on Vercel!
 if (typeof window === "undefined" || !process.env.TINA_PUBLIC_IS_LOCAL) {
   process.env.TINA_PUBLIC_IS_LOCAL = "true";
 }
 
 export default defineConfig({
   branch: "main",
-  clientId: "00000000-0000-0000-0000-000000000000",
-  token: "0000000000000000000000000000000000000000",
+  clientId: process.env.TINA_CLIENT_ID || "00000000-0000-0000-0000-000000000000",
+  token: process.env.TINA_TOKEN || "0000000000000000000000000000000000000000",
   
   build: { outputFolder: "admin", publicFolder: "public" },
   media: { tina: { mediaRoot: "uploads", publicFolder: "public" } },
