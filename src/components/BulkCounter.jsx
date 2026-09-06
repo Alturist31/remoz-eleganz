@@ -18,21 +18,19 @@ export default function BulkCounter({ initialQty = 100, basePrice = 450, product
   });
   
   const totalCost = quantity * basePrice;
+  
   const corporateContactEmail = "remoz2306@gmail.com"; 
   const whatsappNumber = "917972319483"; 
 
   const safeColorString = typeof selectedColor === 'string' ? selectedColor : "";
   const variantText = safeColorString ? `• Chosen Variant: ${safeColorString.toUpperCase()}` : "• Chosen Variant: Default/Standard";
-  
-  // Computes the absolute URL address link of the product photo asset
-  const fullProductImageLink = productImage.startsWith('http') ? productImage : `https://venturesolutions.in${productImage}`;
 
-  const waMessage = `Hello! I would like to request a bulk quote for "${productName}".\n• Quantity: ${quantity} units\n${variantText}\n• Estimated Base Value: ₹${totalCost.toLocaleString()}\nPlease share details on custom branding options.`;
+  const waMessage = `Hello Remoz Eleganz Team! I would like to request a bulk quote for "${productName}".\n• Quantity: ${quantity} units\n${variantText}\n• Estimated Base Value: ₹${totalCost.toLocaleString()}\nPlease share branding details.`;
   const whatsappUrl = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(waMessage);
 
-  // 🚀 PHOTO LINK INTEGRATION: Automatically embeds the absolute image file link into the email text body
-  const emailSubject = `Corporate RFQ Request: ${productName} (${quantity} Units)`;
-  const emailBody = `Dear Remoz Eleganz Team,\n\nI would like to request a formal business quotation for the following catalog item:\n\nProduct Name: ${productName}\nQuantity Required: ${quantity} units\nSelected Color/Variant: ${safeColorString.toUpperCase() || 'Default'}\nEstimated Base Value: ₹${totalCost.toLocaleString()}\nProduct Photo Link: ${fullProductImageLink}\n\nClient Contact Details:\n• Name: ${clientName || '[Not Provided]'}\n• Company Name: ${companyName || '[Not Provided]'}\n• Email Address: ${clientEmail}\n\nPlease share your corporate pricing slabs and custom logo branding options with us.\n\nRegards.`;
+  const emailSubject = `Corporate Request [Remoz Eleganz]: ${productName} (${quantity} Units)`;
+  
+  const emailBody = `Dear Remoz Eleganz Team,\n\nI would like to request a formal business quotation for the following catalog item:\n\nProduct Name: ${productName}\nQuantity Required: ${quantity} units\nSelected Color/Variant: ${safeColorString.toUpperCase() || 'Default'}\nEstimated Base Value: ₹${totalCost.toLocaleString()}\n\nClient Contact Details:\n• Name: ${clientName || '[Not Provided]'}\n• Company Name: ${companyName || '[Not Provided]'}\n• Email Address: ${clientEmail}\n\nPlease share your corporate pricing slabs and custom options with us.\n\nRegards.`;
   const mailtoUrl = `mailto:${corporateContactEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 
   const handleEmailSubmission = (e) => {
@@ -74,31 +72,21 @@ export default function BulkCounter({ initialQty = 100, basePrice = 450, product
   }, [isModalOpen]);
   return (
     <div style={{ marginTop: '15px' }}>
-       <button 
-        type="button" 
-        onClick={() => setIsModalOpen(true)}
-        style={{ display: 'block', width: '100%', background: '#E31E24', color: 'white', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', marginBottom: '12px' }}
-      >
+      <button type="button" onClick={() => setIsModalOpen(true)} style={{ display: 'block', width: '100%', background: '#E31E24', color: 'white', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', marginBottom: '12px' }}>
         🔎 View Details & Estimate
       </button>
 
       {isModalOpen && typeof document !== 'undefined' && ReactDOM.createPortal(
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999999, padding: '16px', backdropFilter: 'blur(4px)', boxSizing: 'border-box' }} onClick={() => setIsModalOpen(false)}>
           
-          {/* 🚀 RESPONSIVE MOBILE STYLES INJECTION HUB */}
           <style dangerouslySetInnerHTML={{__html: `
-            .modal-window-card {
-              background: white; width: 100%; max-width: 940px; height: 580px; border-radius: 16px;
-              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative;
-              display: flex; flex-direction: column; box-sizing: border-box;
-            }
+            .modal-window-card { background: white; width: 100%; max-width: 940px; height: 580px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative; display: flex; flex-direction: column; box-sizing: border-box; }
             .modal-split-row { display: flex; flex-direction: row; flex-wrap: nowrap; width: 100%; height: 100%; align-items: stretch; }
             .modal-img-col { flex: 0 0 45%; width: 45%; background: #f8fafc; display: flex; align-items: center; justify-content: center; padding: 30px; border-right: 1px solid #e2e8f0; box-sizing: border-box; }
             .modal-form-col { flex: 0 0 55%; width: 55%; padding: 35px; display: flex; flex-direction: column; justify-content: space-between; height: 100%; box-sizing: border-box; }
             .modal-scroll-desc { overflow-y: auto; padding-right: 5px; flex-grow: 1; margin-bottom: 15px; }
             .modal-action-row { display: flex; flex-direction: column; border-top: 1px solid #e2e8f0; padding-top: 12px; gap: 10px; box-sizing: border-box; }
 
-            /* 📱 FIXED ORIENTATION OVERRIDES FOR PORTRAIT & LANDSCAPE MOBILE ORIENTATION */
             @media (max-width: 768px), (max-height: 600px) {
               .modal-window-card { height: auto !important; max-height: 92vh !important; overflow-y: auto !important; }
               .modal-split-row { flex-direction: column !important; flex-wrap: wrap !important; height: auto !important; }
@@ -120,7 +108,7 @@ export default function BulkCounter({ initialQty = 100, basePrice = 450, product
 
               <div className="modal-form-col">
                 <div className="modal-scroll-desc">
-                  <span style={{ background: '#E6F0EE', color: '#E31E24', padding: '4px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase' }}>{categoryName}</span>
+                  <span style={{ background: '#FDF2F2', color: '#E31E24', padding: '4px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase' }}>{categoryName}</span>
                   <h2 style={{ margin: '12px 0 10px 0', fontSize: '24px', color: '#111827', fontWeight: '800', lineHeight: '1.2' }}>{productName}</h2>
                   <div style={{ fontSize: '13px', color: '#4b5563', lineHeight: '1.5', whiteSpace: 'pre-wrap', borderLeft: '3px solid #E31E24', paddingLeft: '15px' }}>
                     <strong>Product Specification Details:</strong><br />{cleanDescription || "Custom logo options available."}
