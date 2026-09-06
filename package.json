@@ -1,14 +1,16 @@
 {
-  "name": "astro-sandbox",
+  "name": "remoz-eleganz",
   "type": "module",
   "version": "0.0.1",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "tinacms dev --port 9001 -c \"astro dev\"",
-    "start": "astro dev",
-    "build": "TINA_PUBLIC_IS_LOCAL=true tinacms build && astro build"
+    "build": "astro build",
+  "dev": "tinacms dev -c \"astro dev\"",
+  "start": "astro dev",
+  "preview": "astro preview",
+  "astro": "astro"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.4",
