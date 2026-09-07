@@ -294,7 +294,7 @@ export default defineConfig({
                 );
               },
             },
-            options: ["Black,"Blue","Brown","Tan","Grey","Red","White","Beige","Green"],
+            options: ["Black", "Blue", "Brown", "Tan", "Grey", "Red", "White", "Beige", "Green"],
           },
           {
             type: "rich-text",
