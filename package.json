@@ -7,10 +7,10 @@
   },
   "scripts": {
     "build": "tinacms build && astro build",
-  "dev": "tinacms dev -c \"astro dev\"",
-  "start": "astro dev",
-  "preview": "astro preview",
-  "astro": "astro"
+    "dev": "tinacms dev -c \"astro dev\"",
+    "start": "astro dev",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.4",
@@ -31,6 +31,8 @@
   },
   "devDependencies": {
     "@iarna/toml": "^2.2.5",
-    "@tinacms/cli": "^2.6.1"
+    "@tinacms/cli": "^2.6.1",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }

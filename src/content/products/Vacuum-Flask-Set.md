@@ -11,4 +11,3 @@ colors:
   - grey
   - white
 ---
-

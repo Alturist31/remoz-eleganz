@@ -7,4 +7,3 @@ moq: 24
 colors:
   - black
 ---
-

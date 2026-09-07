@@ -8,4 +8,3 @@ colors:
   - black
   - grey
 ---
-

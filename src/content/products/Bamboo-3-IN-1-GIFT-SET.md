@@ -7,4 +7,3 @@ moq: 30
 colors:
   - black
 ---
-

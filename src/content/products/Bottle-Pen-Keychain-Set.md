@@ -10,4 +10,3 @@ colors:
   - red
   - white
 ---
-

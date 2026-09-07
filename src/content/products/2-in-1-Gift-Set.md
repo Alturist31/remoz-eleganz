@@ -11,4 +11,3 @@ colors:
   - tan
   - red
 ---
-

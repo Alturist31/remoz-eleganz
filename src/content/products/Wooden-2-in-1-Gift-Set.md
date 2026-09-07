@@ -5,7 +5,7 @@ category:
   - i
   - f
   - t
-  - ' '
+  - " "
   - S
   - e
   - t
@@ -16,4 +16,3 @@ image: /uploads/Wooden_2-in-1-Gift-Set.jpg
 price: 60
 moq: 25
 ---
-
