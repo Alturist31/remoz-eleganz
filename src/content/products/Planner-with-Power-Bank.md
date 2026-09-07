@@ -1,5 +1,5 @@
 ---
-title: Planner with Power Bank
+title: Premium Planner with Power Bank
 category:
   - Tech & Lifestyle
   - Office Stationery
