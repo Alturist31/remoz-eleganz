@@ -307,4 +307,3 @@ export default defineConfig({
     ],
   },
 });
- "Black,"Blue","Brown","Tan","Grey","Red","White","Beige","Green"
