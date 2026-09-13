@@ -35,6 +35,7 @@ export default defineConfig({
           globalAdmin: true
         },
         fields: [
+          { type: "boolean", name: "isFeatured", label: "Pin to Top (Feature Product Visibility)" },
           {
             type: "string",
             name: "title",

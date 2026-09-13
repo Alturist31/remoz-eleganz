@@ -1,6 +1,8 @@
 ---
+isFeatured: true
 title: CrossHatch A5 Notebook Diary
-category: Diary
+category:
+  - Diary
 image: /uploads/H3308.jpg
 price: 174
 moq: 25
