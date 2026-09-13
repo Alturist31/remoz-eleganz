@@ -32,6 +32,7 @@ export default defineConfig({
             create: true,
             delete: true,
           },
+          globalAdmin: true
         },
         fields: [
           {
