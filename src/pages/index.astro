@@ -37,7 +37,6 @@ const uniqueCategories = ["All", ...new Set(rawCategories)];
       .logo-box { display: flex; align-items: center; gap: 14px; }
       .logo-img { height: 48px; width: auto; object-fit: contain; }
       
-      /* 🚀 RECOLORED BRAND ACCENTS: Swapped to #E31E24 Premium Crimson Red */
       .brand-title { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.75px; }
       .brand-title span { color: #E31E24; }
       .toolbar-controls { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; }
@@ -58,7 +57,6 @@ const uniqueCategories = ["All", ...new Set(rawCategories)];
       .sort-select:focus { border-color: #E31E24; background-color: white; box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.1); }
       main { max-width: 1200px; margin: 0 auto; padding: 48px 32px; }
       
-      /* 🚀 RECOLORED OPTIONS COUNTER: Modified to Premium Soft Red Tints (#FDF2F2 and #E31E24) */
       .count-badge { display: inline-block; font-size: 14px; font-weight: 700; color: #E31E24; margin-bottom: 22px; background: #FDF2F2; padding: 8px 18px; border-radius: 8px; border: 1px dashed #E31E24; letter-spacing: 0.25px; box-shadow: 0 2px 4px rgba(227, 30, 36, 0.02); }
       .count-badge .count-number-box { color: #E31E24 !important; font-weight: 800 !important; font-size: 14px !important; margin: 0 3px !important; display: inline-block !important; }
 
@@ -80,7 +78,6 @@ const uniqueCategories = ["All", ...new Set(rawCategories)];
       .card-content { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
       .badge-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
       
-      /* 🚀 RECOLORED PRODUCT CARD BADGES */
       .badge { background: #FDF2F2; color: #E31E24; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
       .product-card h3 { margin: 8px 0; font-size: 20px; font-weight: 700; color: #0f172a; }
       .meta { font-size: 14px; color: #475569; margin-bottom: 18px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 12px; }
@@ -126,11 +123,14 @@ const uniqueCategories = ["All", ...new Set(rawCategories)];
       </div>
 
       <div class="count-badge" id="catalogCounter">
-        Showing <span class="count-number-box">{localProducts.length}</span> Options
+        Showing <span class="count-number-box">{localProducts.filter(p => p.data?.isActive !== false).length}</span> Options
       </div>
 
       <div class="catalog-grid" id="catalogGrid">
         {localProducts.map((product) => {
+            if (product.data?.isActive !== undefined && product.data?.isActive === false) {
+            return null;
+          }
           let pCats = [];
           const rawCatField = product.data?.category || [];
           if (Array.isArray(rawCatField)) {
@@ -190,36 +190,44 @@ const uniqueCategories = ["All", ...new Set(rawCategories)];
       let searchQuery = "";
 
       function filterCatalog() {
-        const lowerCategory = activeCategory.toLowerCase();
+          const activeCategory = document.querySelector('.filter-btn.active')?.getAttribute('data-target') || 'All';
+        const searchQuery = searchInput.value.toLowerCase().trim();
         let visibleCount = 0;
-        
+
         cards.forEach(card => {
-          const title = card.getAttribute("data-title") || "";
-          const desc = card.getAttribute("data-desc") || "";
-          const cardCategoriesStr = card.getAttribute("data-categories") || "[]";
-          const cardCategories = JSON.parse(cardCategoriesStr);
-          const matchesCategory = activeCategory === "All" || cardCategories.includes(lowerCategory);
-          const matchesSearch = searchQuery === "" || title.includes(searchQuery) || desc.includes(searchQuery) || cardCategoriesStr.includes(searchQuery);
+          // 🚀 FIX: Correctly parses the plural 'data-categories' array layout tag wrapper
+          const cardCategoriesRaw = card.getAttribute('data-categories') || '[]';
+          let cardCategories = [];
+          try {
+            cardCategories = JSON.parse(cardCategoriesRaw);
+          } catch(e) {
+            cardCategories = [cardCategoriesRaw.replace(/[\[\]\"']/g, '').toLowerCase()];
+          }
           
+          const matchesCategory = activeCategory === 'All' || cardCategories.map(c => c.toLowerCase()).includes(activeCategory.toLowerCase());
+          
+          const cardTitle = (card.getAttribute('data-title') || '').toLowerCase();
+          const cardDesc = (card.getAttribute('data-desc') || '').toLowerCase();
+          const matchesSearch = cardTitle.includes(searchQuery) || cardDesc.includes(searchQuery);
+
           if (matchesCategory && matchesSearch) {
-            if (card.style.display !== 'flex') {
-              card.style.opacity = '0';
-              card.style.display = 'flex';
-              setTimeout(() => { card.style.opacity = '1'; }, 10);
-            }
+            card.style.display = 'flex';
             visibleCount++;
           } else {
             card.style.display = 'none';
           }
         });
-        
-        catalogCounter.innerHTML = `Showing <span class="count-number-box">${visibleCount}</span> Option${visibleCount === 1 ? '' : 's'}`;
-        
-        const isSortActive = priceSorter.value !== 'default' && priceSorter.value !== '';
-        if (searchQuery !== '' || activeCategory !== 'All' || isSortActive) {
-          resetFiltersBtn.style.display = 'block';
-        } else {
-          resetFiltersBtn.style.display = 'none';
+
+        // Updates your count number box live
+        const counterBox = document.querySelector('#catalogCounter .count-number-box');
+        if (counterBox) {
+          counterBox.textContent = visibleCount;
+        }
+
+        // 🚀 FIX: Toggles Clear Filters button visibility if anything is altered or filtered away
+        const isFiltered = activeCategory !== 'All' || searchQuery !== '' || priceSorter.value !== 'default';
+        if (resetFiltersBtn) {
+          resetFiltersBtn.style.display = isFiltered ? 'inline-block' : 'none';
         }
       }
 
@@ -267,7 +275,7 @@ const uniqueCategories = ["All", ...new Set(rawCategories)];
         searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
         filterCatalog();
       });
-      priceSorter?.addEventListener("change", () => { sortCatalog(); });
+      priceSorter?.addEventListener("change", () => { sortCatalog(); filterCatalog();});
     </script>
   </body>
 </html>

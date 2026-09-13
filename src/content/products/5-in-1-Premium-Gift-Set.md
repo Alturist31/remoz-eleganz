@@ -1,6 +1,8 @@
 ---
+isOutOfStock: true
 title: 5 in 1 Premium Gift Set
-category: Gift Sets
+category:
+  - Gift Sets
 image: /uploads/H998.jpg
 price: 2050
 moq: 10

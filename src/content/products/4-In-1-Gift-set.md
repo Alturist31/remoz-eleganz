@@ -1,6 +1,10 @@
 ---
+isActive: true
+isOutOfStock: false
+isFeatured: false
 title: 4 In 1 Gift set
-category: Gift Sets
+category:
+  - Gift Sets
 image: /uploads/H999.jpg
 price: 885
 moq: 10
