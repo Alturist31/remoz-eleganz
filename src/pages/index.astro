@@ -233,6 +233,7 @@ const uniqueCategories = ["All", ...new Set(rawCategories)];
       }
 
       resetFiltersBtn?.addEventListener('click', () => {
+        /*
         searchInput.value = '';
         searchQuery = '';
         priceSorter.value = 'default';
@@ -242,6 +243,8 @@ const uniqueCategories = ["All", ...new Set(rawCategories)];
           buttons[0].classList.add('active');
         }
         sortCatalog();
+       */
+       window.location.reload();
       });
 
       buttons.forEach(btn => {

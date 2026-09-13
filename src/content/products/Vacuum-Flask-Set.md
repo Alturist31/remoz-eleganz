@@ -1,6 +1,8 @@
 ---
+isFeatured: true
 title: Vacuum Flask Set
-category: Gift Sets
+category:
+  - Gift Sets
 image: /uploads/VaccumFlaskSet.jpg
 price: 255
 moq: 25
@@ -11,3 +13,4 @@ colors:
   - grey
   - white
 ---
+
