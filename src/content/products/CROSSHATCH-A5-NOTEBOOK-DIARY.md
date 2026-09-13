@@ -1,5 +1,6 @@
 ---
-isFeatured: true
+isOutOfStock: true
+isFeatured: false
 title: CrossHatch A5 Notebook Diary
 category:
   - Diary
