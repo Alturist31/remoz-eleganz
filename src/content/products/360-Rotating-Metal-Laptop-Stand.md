@@ -1,5 +1,5 @@
 ---
-isOutOfStock: true
+isOutOfStock: false
 title: 360 Rotating Metal Laptop Stand
 category:
   - Tech & Lifestyle
