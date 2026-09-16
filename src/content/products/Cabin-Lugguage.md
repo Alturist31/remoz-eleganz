@@ -1,5 +1,5 @@
 ---
-title: Cabin Lugguage
+title: Cabin Luggage Trolley
 category:
   - Tech & Lifestyle
 image: /uploads/CabinLugguage.png
