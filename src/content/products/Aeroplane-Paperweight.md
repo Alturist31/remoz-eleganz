@@ -1,5 +1,5 @@
 ---
-title: Aeroplane Paperweight
+title: Aeroplane Paperweight / Watch
 category:
   - Tech & Lifestyle
   - Office Stationery
