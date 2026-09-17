@@ -1,5 +1,5 @@
 ---
-title: Lifetime Calendar with Watch
+title: Lifetime Calendar with Watch - Big
 category:
   - Office Stationery
 image: /uploads/SteelLifeTimeCalendarwithWatch.png
