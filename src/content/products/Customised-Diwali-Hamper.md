@@ -1,4 +1,5 @@
 ---
+isFeatured: true
 title: Customised Diwali Hamper
 category:
   - Gift Sets
